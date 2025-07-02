@@ -9,6 +9,7 @@
   };
 
   outputs = {
+    self,
     nixpkgs,
     rust-overlay,
     crane,
@@ -26,19 +27,53 @@
     # Helper function to generate per-system attributes
     forAllSystems = f: nixpkgs.lib.genAttrs systems f;
   in {
-    # Optional: Define packages if using crane to build (uncomment to use)
-    # packages = forAllSystems (system: let
-    #   pkgs = import nixpkgs {
-    #     inherit system;
-    #     overlays = [rust-overlay.overlays.default];
-    #   };
-    #   craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default);
-    # in {
-    #   default = craneLib.buildPackage {
-    #     src = craneLib.cleanCargoSource ./.;
-    #     strictDeps = true;
-    #   };
-    # });
+    # Define packages using crane to build
+    packages = forAllSystems (system: let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [rust-overlay.overlays.default];
+      };
+      craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default);
+      
+      commonArgs = {
+        src = ./.;
+        strictDeps = true;
+        
+        buildInputs = with pkgs; [
+          wayland
+          wayland-protocols
+          libxkbcommon
+        ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+          pkgs.libiconv
+        ];
+
+        nativeBuildInputs = with pkgs; [
+          pkg-config
+        ];
+        
+        # Set environment variable for wayland-protocols location
+        WAYLAND_PROTOCOLS_DIR = "${pkgs.wayland-protocols}/share/wayland-protocols";
+      };
+      
+      cargoArtifacts = craneLib.buildDepsOnly (commonArgs // {
+        # Force rebuild of dependencies with protocol files
+        pname = "wrtype-deps";
+      });
+    in {
+      default = craneLib.buildPackage (commonArgs // {
+        inherit cargoArtifacts;
+        
+        meta = with pkgs.lib; {
+          description = "A Rust implementation of wtype - xdotool type for Wayland";
+          homepage = "https://github.com/conneroisu/wrtype";
+          license = licenses.mit;
+          maintainers = [ ];
+          platforms = platforms.linux;
+        };
+      });
+      
+      wrtype = self.packages.${system}.default;
+    });
 
     # Define devShells for all systems
     devShells = forAllSystems (system: let
