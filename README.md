@@ -72,6 +72,80 @@ The implementation consists of several modules:
 - **Keymap Generation**: Dynamic XKB keymap generation for unicode support
 - **Command Execution**: Sequentially executes typing commands with proper timing
 
+## Library Usage
+
+wrtype can be used as a Rust library for programmatic text input and automation:
+
+```rust
+use wrtype::{WrtypeClient, Modifier};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut client = WrtypeClient::new()?;
+    
+    // Type text
+    client.type_text("Hello, Wayland!")?;
+    
+    // Send keyboard shortcuts
+    client.send_shortcut(&[Modifier::Ctrl], "c")?;
+    
+    Ok(())
+}
+```
+
+Add to your `Cargo.toml`:
+```toml
+[dependencies]
+wrtype = { git = "https://github.com/conneroisu/wrtype" }
+```
+
+## Examples
+
+The `examples/` directory contains comprehensive examples showing different use cases:
+
+### Quick Start
+
+```bash
+# Run the interactive example runner
+./run-examples.sh all
+
+# Or run specific examples
+./run-examples.sh basic      # Basic text typing
+./run-examples.sh shortcuts  # Keyboard shortcuts
+./run-examples.sh stdin      # Stdin processing
+./run-examples.sh advanced   # Complex sequences
+```
+
+### Using just (if available)
+
+```bash
+# Quick start guide
+just quick-start
+
+# Run specific examples
+just example-basic
+just example-shortcuts
+just examples-all
+
+# Development commands
+just build
+just test
+just dev
+```
+
+### Available Examples
+
+1. **Basic Typing** (`basic_typing.rs`) - Simple text input with Unicode support
+2. **Shortcuts** (`shortcuts.rs`) - Common keyboard shortcuts and combinations
+3. **Stdin Processing** (`stdin_processing.rs`) - Reading and processing piped input
+4. **Advanced Sequences** (`advanced_sequences.rs`) - Complex automation workflows
+
+Run any example with:
+```bash
+cargo run --example basic_typing
+# or using nix
+nix develop -c cargo run --example basic_typing
+```
+
 ## Compatibility
 
 wrtype is compatible with the original C implementation of wtype and supports the same command-line interface and functionality.

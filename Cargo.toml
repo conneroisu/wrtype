@@ -7,6 +7,10 @@ license = "MIT"
 authors = ["connerohnesorge"]
 repository = "https://github.com/conneroisu/wrtype"
 
+[lib]
+name = "wrtype"
+path = "src/lib.rs"
+
 [dependencies]
 clap = { version = "4.4", features = ["derive"] }
 wayland-client = "0.31"

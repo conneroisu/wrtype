@@ -3,12 +3,8 @@
 // This module handles command-line argument parsing, command sequencing, and orchestrates
 // the interaction between the Wayland virtual keyboard protocol and the XKB keymap system.
 
-mod executor;
-mod keymap;
-mod wayland;
-
+use wrtype::{Command, Modifier, CommandExecutor, connect_wayland};
 use clap::Parser;
-use executor::CommandExecutor;
 use std::time::Duration;
 
 /// Command-line arguments structure using clap for automatic parsing and help generation.
@@ -63,60 +59,6 @@ pub struct Args {
     pub stdin: bool,
 }
 
-/// Internal command representation after parsing command-line arguments.
-/// Each command represents a single action to be executed in sequence.
-#[derive(Debug, Clone)]
-pub enum Command {
-    /// Type a string of text with specified delay between characters
-    Text { text: String, delay: Duration },
-    /// Press a modifier key (adds to current modifier state)
-    ModPress(Modifier),
-    /// Release a modifier key (removes from current modifier state)
-    ModRelease(Modifier),
-    /// Press a named key (key stays pressed until released)
-    KeyPress(String),
-    /// Release a named key
-    KeyRelease(String),
-    /// Sleep for specified duration (for timing control)
-    Sleep(Duration),
-    /// Read and type text from stdin with specified delay
-    StdinText { delay: Duration },
-}
-
-/// Modifier keys with their corresponding bit values for Wayland protocol.
-/// These values match the modifier mask constants used in XKB and Wayland.
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum Modifier {
-    /// Shift key - bit 0 (value 1)
-    Shift = 1,
-    /// Caps Lock - bit 1 (value 2) - handled as locked modifier
-    CapsLock = 2,
-    /// Control key - bit 2 (value 4)
-    Ctrl = 4,
-    /// Alt key - bit 3 (value 8)
-    Alt = 8,
-    /// Logo/Super/Windows key - bit 6 (value 64)
-    Logo = 64,
-    /// AltGr (right Alt) key - bit 7 (value 128)
-    AltGr = 128,
-}
-
-impl Modifier {
-    /// Convert string modifier name to enum value.
-    /// Accepts both "logo" and "win" for the Windows/Super key.
-    /// Case-insensitive matching for user convenience.
-    pub fn from_name(name: &str) -> Option<Self> {
-        match name.to_lowercase().as_str() {
-            "shift" => Some(Self::Shift),
-            "capslock" => Some(Self::CapsLock),
-            "ctrl" => Some(Self::Ctrl),
-            "alt" => Some(Self::Alt),
-            "logo" | "win" => Some(Self::Logo),
-            "altgr" => Some(Self::AltGr),
-            _ => None,
-        }
-    }
-}
 
 /// Parse command-line arguments into a sequence of executable commands.
 /// 
@@ -251,7 +193,7 @@ fn main() -> anyhow::Result<()> {
     // Initialize Wayland connection and virtual keyboard protocol
     // This establishes the connection to the compositor and creates a virtual keyboard
     // that we can use to send key events
-    let (connection, wayland_state) = wayland::connect_wayland()?;
+    let (connection, wayland_state) = connect_wayland()?;
     
     // Execute all commands in sequence
     // The executor handles keymap management, protocol communication, and timing
