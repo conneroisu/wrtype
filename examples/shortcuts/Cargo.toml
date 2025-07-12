@@ -1,0 +1,8 @@
+[package]
+name = "shortcuts"
+version = "0.1.0"
+edition = "2021"
+description = "Keyboard shortcuts and hotkeys example for wrtype"
+
+[dependencies]
+wrtype = { path = "../.." }

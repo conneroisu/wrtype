@@ -1,0 +1,8 @@
+[package]
+name = "advanced_sequences"
+version = "0.1.0"
+edition = "2021"
+description = "Advanced key sequences example for wrtype"
+
+[dependencies]
+wrtype = { path = "../.." }

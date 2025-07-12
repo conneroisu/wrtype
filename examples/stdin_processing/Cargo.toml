@@ -1,0 +1,8 @@
+[package]
+name = "stdin_processing"
+version = "0.1.0"
+edition = "2021"
+description = "Stdin processing example for wrtype"
+
+[dependencies]
+wrtype = { path = "../.." }
