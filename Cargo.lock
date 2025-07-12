@@ -3,6 +3,13 @@
 version = 4
 
 [[package]]
+name = "advanced_sequences"
+version = "0.1.0"
+dependencies = [
+ "wrtype",
+]
+
+[[package]]
 name = "anstream"
 version = "0.6.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -57,6 +64,13 @@ name = "anyhow"
 version = "1.0.98"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e16d2d3311acee920a9eb8d33b8cbc1787ce4a264e85f964c2404b969bdcd487"
+
+[[package]]
+name = "basic_typing"
+version = "0.1.0"
+dependencies = [
+ "wrtype",
+]
 
 [[package]]
 name = "bitflags"
@@ -288,10 +302,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
+name = "shortcuts"
+version = "0.1.0"
+dependencies = [
+ "wrtype",
+]
+
+[[package]]
 name = "smallvec"
 version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
+
+[[package]]
+name = "stdin_processing"
+version = "0.1.0"
+dependencies = [
+ "wrtype",
+]
 
 [[package]]
 name = "strsim"

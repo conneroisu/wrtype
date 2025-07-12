@@ -1,11 +1,36 @@
+[workspace]
+members = [
+    ".",
+    "examples/basic_typing",
+    "examples/shortcuts", 
+    "examples/advanced_sequences",
+    "examples/stdin_processing",
+]
+
 [package]
 name = "wrtype"
 version = "0.1.0"
 edition = "2021"
-description = "A Rust implementation of wtype - xdotool type for Wayland"
+rust-version = "1.70"
+description = "A Rust implementation of wtype - a Wayland virtual keyboard tool that types text and sends key events"
 license = "MIT"
-authors = ["connerohnesorge"]
+authors = ["connerohnesorge <conneroisu@outlook.com>"]
 repository = "https://github.com/conneroisu/wrtype"
+homepage = "https://github.com/conneroisu/wrtype"
+documentation = "https://docs.rs/wrtype"
+readme = "README.md"
+keywords = ["wayland", "keyboard", "typing", "automation", "xdotool"]
+categories = ["command-line-utilities", "os::unix-apis", "accessibility", "development-tools"]
+exclude = [
+    ".github/",
+    "*.nix",
+    "flake.*",
+    "justfile",
+    "result*",
+    "shell.nix",
+    ".envrc",
+    ".direnv/",
+]
 
 [lib]
 name = "wrtype"

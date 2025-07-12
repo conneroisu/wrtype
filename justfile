@@ -12,45 +12,45 @@ build:
 build-release:
     cargo build --release
 
-# Build all examples
+# Build all examples (workspace packages)
 build-examples:
-    cargo build --examples
+    cargo build --workspace
 
-# Run all tests
+# Run all tests (workspace)
 test:
-    cargo test
+    cargo test --workspace
 
-# Check code without building
+# Check code without building (workspace)
 check:
-    cargo check
+    cargo check --workspace
 
-# Run linting
+# Run linting (includes examples)
 lint:
-    cargo clippy -- -D warnings
+    cargo clippy --workspace -- -D warnings
 
-# Format code
+# Format code (workspace)
 fmt:
-    cargo fmt
+    cargo fmt --all
 
-# Run a specific example
+# Run a specific example package
 run-example name:
-    cargo run --example {{name}}
+    cargo run --package {{name}}
 
 # Run basic typing example
 example-basic:
-    cargo run --example basic_typing
+    cargo run --package basic_typing
 
 # Run shortcuts example  
 example-shortcuts:
-    cargo run --example shortcuts
+    cargo run --package shortcuts
 
 # Run stdin processing example
 example-stdin:
-    cargo run --example stdin_processing
+    cargo run --package stdin_processing
 
 # Run advanced sequences example
 example-advanced:
-    cargo run --example advanced_sequences
+    cargo run --package advanced_sequences
 
 # Run all examples interactively
 examples-all:
@@ -58,7 +58,7 @@ examples-all:
 
 # Build and run examples using nix development environment
 nix-example name:
-    nix develop -c cargo run --example {{name}}
+    nix develop -c cargo run --package {{name}}
 
 # Build using nix
 nix-build:
@@ -86,10 +86,10 @@ docs-lib:
 
 # Check if examples compile
 check-examples:
-    cargo check --examples
+    cargo check --workspace
 
-# Quick development cycle: format, lint, test, build
-dev: fmt lint test build
+# Quick development cycle: format, lint, test, build (includes examples)
+dev: fmt lint test build check-examples
 
 # Nix development cycle
 nix-dev:
